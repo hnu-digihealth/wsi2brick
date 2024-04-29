@@ -1,2 +1,6 @@
+def placeholder() -> str:
+    return ""
+
+
 if __name__ == '__main__':
-    pass
+    placeholder()
