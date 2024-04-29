@@ -17,3 +17,11 @@ build-backend = "pdm.backend"
 
 [tool.pdm]
 distribution = true
+
+[tool.pdm.dev-dependencies]
+testing = [
+    "pytest>=8.2.0",
+]
+
+[tool.pdm.scripts]
+test = "pdm run -v pytest tests"
