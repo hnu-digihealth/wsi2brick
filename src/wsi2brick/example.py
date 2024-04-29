@@ -4,3 +4,4 @@ def placeholder() -> str:
 
 if __name__ == '__main__':
     placeholder()
+    print('works')

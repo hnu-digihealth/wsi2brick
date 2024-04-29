@@ -1,7 +1,7 @@
 name: testing
 
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+  # Triggers the workflow on push or pull request events, but only for the main branch
   push:
     branches: [ main, development ]
   pull_request:
@@ -14,7 +14,6 @@ jobs:
   flake8-lint:
     runs-on: ubuntu-latest
     name: Lint
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python environment
@@ -33,17 +32,18 @@ jobs:
         with:
           ignore: E124,E127,E128,E701,E731
           max-line-length: 120
-          path: src/wsi2brick
+          path: src/wsi2brick tests
+
   testing:
-    runs-on: ${{ matrix.os }}
     name: Test
+    needs: flake8-lint
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12']
         os: [ubuntu-latest, macOS-latest, windows-latest]
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up PDM
         uses: pdm-project/setup-pdm@v4
         with:
@@ -53,4 +53,30 @@ jobs:
           pdm sync -d
       - name: Run Tests
         run: |
-          pdm test
+          pdm run -v coverage run -m pytest tests
+
+  coverage:
+    needs: testing
+    name: Coverage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up PDM
+        uses: pdm-project/setup-pdm@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+        run: |
+          pdm sync -d
+    - name: Generate coverage report
+      run: |
+        pdm run pytest --cov=./ --cov-report=xml tests
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_KEY }}
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true
