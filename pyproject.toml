@@ -1,0 +1,19 @@
+[project]
+name = "wsi2brick"
+version = "0.1.0"
+description = "A simple converter, generationg (lego) brick mosaics from whole slide images"
+authors = [
+    {name = "Daniel Hieber", email = "github@teddowyn.de"},
+]
+dependencies = []
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
