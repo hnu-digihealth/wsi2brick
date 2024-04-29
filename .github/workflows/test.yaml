@@ -62,7 +62,7 @@ jobs:
       with:
         python-version: '3.12'
     - name: Install dependencies
-       run: |
+      run: |
         pdm sync -d
     - name: Generate coverage report
       run: |
