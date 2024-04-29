@@ -33,6 +33,7 @@ jobs:
         with:
           ignore: E124,E127,E128,E701,E731
           max-line-length: 120
+          path: src/wsi2brick
   testing:
     runs-on: ${{ matrix.os }}
     name: Test
