@@ -1,6 +1,7 @@
 # ENTE.Dataset Package
-from .example import placeholder
+from .converter import convert_wsi, convert_tile
 
 __all__ = [
-    placeholder
+    convert_wsi,
+    convert_tile,
 ]
