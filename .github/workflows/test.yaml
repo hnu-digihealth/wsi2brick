@@ -14,6 +14,7 @@ jobs:
   flake8-lint:
     runs-on: ubuntu-latest
     name: Lint
+
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python environment
@@ -26,6 +27,7 @@ jobs:
           ignore: "E124,E127,E128,E701,E731"
           max-line-length: "120"
           path: "wsi2brick"
+
   testing:
     runs-on: ${{ matrix.os }}
     name: Test
@@ -33,19 +35,17 @@ jobs:
       matrix:
         python-version: ['3.10', '3.11', '3.12']
         os: [ubuntu-latest, macOS-latest, windows-latest]
+
     steps:
       - uses: actions/checkout@v4
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v4
         # You are now able to use PDM in your workflow
       - name: Install dependencies
-      run: pdm install
+        run: pdm install
         uses: pdm-project/setup-pdm@v3
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          pdm sync -d -G testing
       - name: Run Tests
         run: |
           pdm test
