@@ -26,7 +26,6 @@ jobs:
         with:
           ignore: "E124,E127,E128,E701,E731"
           max-line-length: "120"
-          path: "wsi2brick"
 
   testing:
     runs-on: ${{ matrix.os }}
@@ -44,7 +43,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          pdm sync -d -G testing
+          pdm sync -d
       - name: Run Tests
         run: |
           pdm test
