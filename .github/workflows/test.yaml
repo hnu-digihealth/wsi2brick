@@ -1,20 +1,53 @@
-Testing:
-  runs-on: ${{ matrix.os }}
-  strategy:
-    matrix:
-      python-version: ['3.10', '3.11', '3.12']
-      os: [ubuntu-latest, macOS-latest, windows-latest]
+name: testing
 
-  steps:
-    - uses: actions/checkout@v3
-    - name: Set up PDM
-      uses: pdm-project/setup-pdm@v3
-      with:
-        python-version: ${{ matrix.python-version }}
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main, development ]
+  pull_request:
+    branches: [ main, development ]
 
-    - name: Install dependencies
-      run: |
-        pdm sync -d -G testing
-    - name: Run Tests
-      run: |
-        pdm test
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  flake8-lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+        with:
+          ignore: "E124,E127,E128,E701,E731"
+          max-line-length: "120"
+          path: "wsi2brick"
+  testing:
+    runs-on: ${{ matrix.os }}
+    name: Test
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@v4
+        # You are now able to use PDM in your workflow
+      - name: Install dependencies
+      run: pdm install
+        uses: pdm-project/setup-pdm@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          pdm sync -d -G testing
+      - name: Run Tests
+        run: |
+          pdm test
