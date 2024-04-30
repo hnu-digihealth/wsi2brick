@@ -37,7 +37,7 @@ dev = [
 [tool.pdm.scripts]
 test = "pdm run -v pytest tests"
 lint = "pdm run -v flake8 --ignore=E124,E127,E128,E701,E731 --max-line-length 120 src tests"
-cov_report = "pdm run -v coverage report -m"
+cov_report = "pdm run -v coverage run -m pytest tests && pdm run coverage xml"
 check_pre_commit = "pdm run pre-commit run --all-files"
 # run prior to tests
 pre_test = "pdm install"
