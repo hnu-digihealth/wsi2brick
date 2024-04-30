@@ -62,9 +62,9 @@ jobs:
     - name: Install dependencies
       run: |
         pdm sync -d
-    - name: Generate coverage report
+    - name: Generate coverage
       run: |
-        pdm run coverage run -m pytest tests
+        pdm cov_report
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:

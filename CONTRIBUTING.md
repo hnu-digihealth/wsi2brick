@@ -11,6 +11,10 @@ If a package is only required during development use `pdm add -dG testing <packa
     - runs all tests in `tests`
 - `pdm lint`:
     - runs flake8 on `src/wsi2brick` and `tests`
+- `cov_report`:
+    - runs pytest (without installation of the project)
+    - generates an coverage report
+    - shows the coverage report
 
 ### Virtual Environment
 The virtual environment is created as part of pdm. It can be activated using `source .venv/bin/activate`.<br>
