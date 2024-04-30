@@ -11,28 +11,28 @@ on:
   workflow_dispatch:
 
 jobs:
-  # flake8-lint:
-  #   runs-on: ubuntu-latest
-  #   name: Lint
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Set up PDM
-  #       uses: pdm-project/setup-pdm@v4
-  #       with:
-  #         python-version: '3.12'
-  #     - name: Install dependencies
-  #       run: |
-  #         pdm sync -d
-  #     - name: flake8 Lint
-  #       uses: py-actions/flake8@v2
-  #       with:
-  #         ignore: E124,E127,E128,E701,E731
-  #         max-line-length: 120
-  #         path: src/wsi2brick tests
+  flake8-lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PDM
+        uses: pdm-project/setup-pdm@v4
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          pdm sync -d
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+        with:
+          ignore: E124,E127,E128,E701,E731
+          max-line-length: 120
+          #path: src/wsi2brick tests
 
   testing:
     name: Test
-    # needs: flake8-lint
+    needs: flake8-lint
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -44,12 +44,9 @@ jobs:
         uses: pdm-project/setup-pdm@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          pdm sync -d
       - name: Run Tests
         run: |
-          pdm run -v coverage run -m pytest tests
+          pdm test
 
   coverage:
     needs: testing
@@ -66,7 +63,7 @@ jobs:
         pdm sync -d
     - name: Generate coverage report
       run: |
-        pdm run pytest --cov=./ --cov-report=xml tests
+        pdm run coverage run -m pytest tests
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:

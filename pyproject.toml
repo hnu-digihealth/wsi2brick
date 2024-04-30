@@ -27,12 +27,17 @@ distribution = true
 testing = [
     "pytest>=8.2.0",
     "flake8>=7.0.0",
-    "pytest-cov>=5.0.0",
     "pytest-mock>=3.14.0",
+    "coverage>=7.5.0",
+]
+dev = [
+    "pre-commit>=3.7.0",
 ]
 
 [tool.pdm.scripts]
 test = "pdm run -v pytest tests"
 lint = "pdm run -v flake8 --ignore=E124,E127,E128,E701,E731 --max-line-length 120 src tests"
+cov_report = "pdm run -v coverage report -m"
+check_pre_commit = "pdm run pre-commit run --all-files"
 # run prior to tests
 pre_test = "pdm install"
